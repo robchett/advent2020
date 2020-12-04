@@ -18,7 +18,6 @@ struct Passport {
     hgt: (bool, bool),
     pid: (bool, bool),
     hcl: (bool, bool),
-    cid: (bool, bool),
     ecl: (bool, bool),
 }
 
@@ -31,7 +30,6 @@ impl Passport {
         let mut hcl = (false, false);
         let mut ecl = (false, false);
         let mut pid = (false, false);
-        let mut cid = (false, false);
         let sections = lines.split(&[' ', '\n'][..]);
         let sections_vec = sections.collect::<Vec<&_>>();
    
@@ -51,7 +49,6 @@ impl Passport {
                             "hcl" => { hcl.0 = true; },
                             "ecl" => { ecl.0 = true; },
                             "pid" => { pid.0 = true; },
-                            "cid" => { cid.0 = true; },
                             _ => {}
                         }
                     }
@@ -60,17 +57,14 @@ impl Passport {
                             "byr" => { 
                                 let val = part.parse::<i32>().unwrap_or_default(); 
                                 byr.1 = val >= 1920 && val <= 2002;
-                                println!("byr: {} -> {}", part, byr.1);
                             }
                             "iyr" => { 
                                 let val = part.parse::<i32>().unwrap_or_default();
                                 iyr.1 = val >= 2010 && val <= 2020;
-                                println!("iyr: {} -> {}", part, iyr.1);
                             },
                             "eyr" => { 
                                 let val = part.parse::<i32>().unwrap_or_default();
                                 eyr.1 = val >= 2020 && val <= 2030 ;
-                                println!("eyr: {} -> {}", part, eyr.1);
                             },
                             "hgt" => { 
                                 let (first, last) = part.split_at(part.len() - 2);
@@ -105,13 +99,9 @@ impl Passport {
                                 }
                                 let parsed = part.parse::<i32>();
                                 match parsed {
-                                    Ok(v) => pid.1 = true,
-                                    Err(e) => {},
+                                    Ok(_v) => pid.1 = true,
+                                    Err(_e) => {},
                                 }
-                            },
-                            "cid" => { 
-                                let val = part.parse::<i32>().unwrap_or_default(); 
-                                cid.1 = val >= 1920 && val <= 2002
                             },
                             _ => {}
                         }
@@ -121,7 +111,7 @@ impl Passport {
                 i += 1;
             }
         }
-        return Passport {byr, eyr, iyr, hgt, pid, hcl, cid, ecl};
+        return Passport {byr, eyr, iyr, hgt, pid, hcl, ecl};
     }
 }
 
