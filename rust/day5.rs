@@ -1,11 +1,6 @@
-use std::fs;
-
-pub fn run() {
-    let contents = fs::read_to_string("../inputs/day5.txt").expect("Input file not found");
-    let lines = contents.split("\n").collect::<Vec<&str>>();
-    let (result1, result2) = calc(&lines);
-    println!("Part 1 output: {}", result1);
-    println!("Part 2 output: {}", result2);
+pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+    let lines = input.split("\n").collect::<Vec<&str>>();
+    return Ok(calc(&lines));
 }
 
 fn calc(lines: &Vec<&str>) -> (i32, i32) {

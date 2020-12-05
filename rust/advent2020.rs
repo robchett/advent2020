@@ -4,26 +4,52 @@ mod day3;
 mod day4;
 mod day5;
 use std::env;
+use std::fs;
 
 fn main() {
     for argument in env::args() {
         let parsed_arg = argument.parse::<i32>();
-        match parsed_arg {
+        let _ = match parsed_arg {
             Ok(v) => run_day(v),
-            Err(_) => (),
-        }
+            Err(_) => run_all(),
+        };
     }
 }
 
-fn run_day(day: i32) {
-    let method: fn() = match day {
+fn run_all() -> Result<(i32, i32), &'static str> {
+    let max = 5;
+    for i in 1..max + 1 {
+        let res = run_day(i);
+        match res {
+            Ok(_v) => {}
+            Err(e) => {
+                println!("Day {} failed: {}", i, e);
+                return Err(e);
+            }
+        }
+    }
+    return Ok((0, 0));
+}
+
+fn run_day(day: i32) -> Result<(i32, i32), &'static str> {
+    let method: fn(String) -> Result<(i32, i32), &'static str> = match day {
         1 => day1::run,
         2 => day2::run,
         3 => day3::run,
         4 => day4::run,
         5 => day5::run,
-        _ => day1::run
+        _ => return Err("Task not yet implemented"),
     };
-
-    method();
+    let contents =
+        fs::read_to_string(format!("../inputs/day{}.txt", day)).expect("Input file not found");
+    match method(contents) {
+        Ok(v) => {
+            println!("Day {}: {} & {}", day, v.0, v.1);
+            return Ok(v);
+        }
+        Err(e) => {
+            println!("Day {} failed: {}", day, e);
+            return Err(e);
+        }
+    }
 }
