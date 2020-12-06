@@ -30,7 +30,7 @@ fn test_run() {
 }
 
 pub fn run(input: String) -> Result<(i32, i32), &'static str> {
-    let lines = input.split("\n").collect::<Vec<&str>>();
+    let lines = input.split("\n");
     let mut max = 0;
     let mut min = 999;
     let mut our_seat = 0;

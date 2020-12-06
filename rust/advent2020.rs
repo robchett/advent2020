@@ -3,6 +3,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 use std::env;
 use std::fs;
 
@@ -17,7 +18,7 @@ fn main() {
 }
 
 fn run_all() -> Result<(i32, i32), &'static str> {
-    let max = 5;
+    let max = 6;
     for i in 1..max + 1 {
         let res = run_day(i);
         match res {
@@ -38,6 +39,7 @@ fn run_day(day: i32) -> Result<(i32, i32), &'static str> {
         3 => day3::run,
         4 => day4::run,
         5 => day5::run,
+        6 => day6::run,
         _ => return Err("Task not yet implemented"),
     };
     let contents =
