@@ -4,6 +4,7 @@ mod day3;
 mod day4;
 mod day5;
 mod day6;
+mod day7;
 use std::env;
 use std::fs;
 
@@ -18,7 +19,7 @@ fn main() {
 }
 
 fn run_all() -> Result<(i32, i32), &'static str> {
-    let max = 6;
+    let max = 7;
     for i in 1..max + 1 {
         let res = run_day(i);
         match res {
@@ -40,11 +41,12 @@ fn run_day(day: i32) -> Result<(i32, i32), &'static str> {
         4 => day4::run,
         5 => day5::run,
         6 => day6::run,
+        7 => day7::run,
         _ => return Err("Task not yet implemented"),
     };
     let contents =
         fs::read_to_string(format!("../inputs/day{}.txt", day)).expect("Input file not found");
-    match method(contents) {
+    match method(contents.replace("\r", "")) {
         Ok(v) => {
             println!("Day {}: {} & {}", day, v.0, v.1);
             return Ok(v);

@@ -10,8 +10,7 @@ fn test_run() {
 pub fn run(input: String) -> Result<(i32, i32), &'static str> {
     let mut part2: i32 = 0;
     let mut part1: i32 = 0;
-    let input_clean = input.replace("\r", "");
-    let groups = input_clean.split("\n\n");
+    let groups = input.split("\n\n");
     for group in groups {
         let mut group_all = vec![];
         let mut group_chars = vec![];
