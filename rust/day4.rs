@@ -8,15 +8,20 @@ fn test_run() {
 }
 
 pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+    // Each passport is delimited by a blank line.
     let lines = input.split("\n\n");
     let mut passports = Vec::new();
+    // Parse each block of lines into a Passport struct
     for line in lines {
         passports.push(Passport::new(line));
     }
+    // Setup return counters
     let mut part1 = 0;
     let mut part2 = 0;
 
     for passport in passports {
+        // Increment part 1 counter if the passport has all the required fields
+        // Improvement: no need to validate part 2 if this doens't pass, the Passport guarenteed to be invalid
         if passport.byr.0
             && passport.eyr.0
             && passport.iyr.0
@@ -27,7 +32,7 @@ pub fn run(input: String) -> Result<(i32, i32), &'static str> {
         {
             part1 += 1;
         }
-
+        // Increment part 2 counter if the passport has all the required fields and they are valid
         if passport.valid_byr()
             && passport.valid_eyr()
             && passport.valid_iyr()
@@ -42,6 +47,8 @@ pub fn run(input: String) -> Result<(i32, i32), &'static str> {
     return Ok((part1, part2));
 }
 
+// Structure to hold the components, each tuple is (is_present: bool, contents: String)
+// Intentionally kept unvalidated as we can use short-circiting to validate the bare minimum fields
 struct Passport {
     byr: (bool, String),
     eyr: (bool, String),
@@ -53,44 +60,54 @@ struct Passport {
 }
 
 impl Passport {
+    // Parses the entry as an int and compares to the 
     fn _valid_year(entry: &String, start: i32, end: i32) -> bool {
         let val = entry.parse::<i32>().unwrap_or_default();
         return val >= start && val <= end;
     }
+    // Checks the presence of the byr and if it falls in the range
     fn valid_byr(&self) -> bool {
         if !self.byr.0 {
             return false;
         }
         return Passport::_valid_year(&self.byr.1, 1920, 2002);
     }
+    // Checks the presence of the iyr and if it falls in the range
     fn valid_iyr(&self) -> bool {
         if !self.iyr.0 {
             return false;
         }
         return Passport::_valid_year(&self.iyr.1, 2010, 2020);
     }
+    // Checks the presence of the eyr and if it falls in the range
     fn valid_eyr(&self) -> bool {
         if !self.eyr.0 {
             return false;
         }
         return Passport::_valid_year(&self.eyr.1, 2020, 2030);
     }
+    // Checks the presence of the hgt and if it falls in the range
     fn valid_hgt(&self) -> bool {
         if !self.hgt.0 {
             return false;
         }
+        // Extract the last 2 characters to decide if comparing as "cm" or "in"
         let (first, last) = self.hgt.1.split_at(self.hgt.1.len() - 2);
         let val = first.parse::<i32>().unwrap_or_default();
         return match last {
+            // Compare the heights in the correct units
             "cm" => val >= 150 && val <= 193,
             "in" => val >= 59 && val <= 76,
+            // Fail validation if the units were not accounted for
             _ => false,
         };
     }
+    // Checks the presence of the hcl and if it falls in the range
     fn valid_hcl(&self) -> bool {
         if !self.hcl.0 {
             return false;
         }
+        // HCL must be 7 characters #[a-z0-9]{6}
         let part = &self.hcl.1;
         if part.len() != 7 {
             return false;
@@ -98,21 +115,26 @@ impl Passport {
         let chars = part.chars();
         for (i, c) in chars.enumerate() {
             match c {
+                // Check that # is the first character.
+                // Improvement: Cleaner to do this with a slice?
                 '#' => {
                     if i != 0 {
                         return false;
                     }
                 }
+                // Check that index 1-6 are numbers or letters
                 'a'..='f' | '0'..='9' => {
                     if i == 0 {
                         return false;
                     }
                 }
+                // Fail if any other character present
                 _ => return false,
             }
         }
         return true;
     }
+    // Checks the presence of the ecl and if it is one of the accepted values
     fn valid_ecl(&self) -> bool {
         if !self.ecl.0 {
             return false;
@@ -126,17 +148,23 @@ impl Passport {
             || part == "hzl"
             || part == "oth";
     }
+        // Checks the presence of the pid, and if it is a 9 digit number (allowing leading 0s)
     fn valid_pid(&self) -> bool {
         if !self.pid.0 {
             return false;
         }
         let part = &self.pid.1;
+        // Fail if not 9 digits
         if part.len() != 9 {
             return false;
         }
+        // Fail if can't be parsed as an int
         return part.parse::<i32>().is_ok();
     }
+
+    // Parse lines into a new Passport
     fn new(lines: &str) -> Passport {
+        // Setup holders for the values with placeholders
         let mut byr = (false, "".to_owned());
         let mut iyr = (false, "".to_owned());
         let mut eyr = (false, "".to_owned());
@@ -144,18 +172,26 @@ impl Passport {
         let mut hcl = (false, "".to_owned());
         let mut ecl = (false, "".to_owned());
         let mut pid = (false, "".to_owned());
-        let sections = lines.split(&[' ', '\n'][..]);
-        let sections_vec = sections.collect::<Vec<&_>>();
 
+        // Split out the parts with any whitespace and collect into a vector
+        let sections_vec = lines.split(&[' ', '\n'][..]).collect::<Vec<&_>>();
+
+        // Loop the sections and extract the data
         for section in sections_vec {
             let mut i = 0;
+            // data is in the format 'key:value'
+            // Impovement: Should check that there were exactly two parts
             let parts = section.split(':');
             let mut section = "";
+            // Loop the parts
+            // Improvement: if parts length is checked, extract as indexes instead of looping
             for part in parts {
                 match i {
+                    // The first part is the key
                     0 => {
                         section = part;
                     }
+                    // Mark each present section as such and store it's value
                     1 => match section {
                         "byr" => {
                             byr.0 = true;
@@ -189,9 +225,13 @@ impl Passport {
                     },
                     _ => {}
                 }
+                // Increment the index so we know were on the result part
+                // Improvement: this isn't very obvious.
                 i += 1;
             }
         }
+
+        // Return a populated Passport
         return Passport {
             byr,
             eyr,
