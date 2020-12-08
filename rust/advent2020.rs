@@ -5,21 +5,28 @@ mod day4;
 mod day5;
 mod day6;
 mod day7;
+mod day8;
 use std::env;
 use std::fs;
 
 fn main() {
     for argument in env::args() {
         let parsed_arg = argument.parse::<i32>();
-        let _ = match parsed_arg {
-            Ok(v) => run_day(v),
-            Err(_) => run_all(),
+        if parsed_arg.is_ok() {
+            match run_day(parsed_arg.unwrap()) {
+                Ok(_) => return,
+                Err(e) => panic!(e)
+            }
         };
+    }
+    match run_all() {
+        Ok(_) => return,
+        Err(e) => panic!(e)
     }
 }
 
 fn run_all() -> Result<(i32, i32), &'static str> {
-    let max = 7;
+    let max = 8;
     for i in 1..max + 1 {
         let res = run_day(i);
         match res {
@@ -42,6 +49,7 @@ fn run_day(day: i32) -> Result<(i32, i32), &'static str> {
         5 => day5::run,
         6 => day6::run,
         7 => day7::run,
+        8 => day8::run,
         _ => return Err("Task not yet implemented"),
     };
     let contents =

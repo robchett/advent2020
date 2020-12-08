@@ -91,6 +91,7 @@ pub fn run(input: String) -> Result<(i32, i32), &'static str> {
     // Work out which key still need their size computing
     let mut to_calc = keys.filter(|x| bags.get(*x).unwrap().1 < 0).collect::<Vec<&&str>>();
     // While there are keys to compute loop them all.
+    // Improvement: I'm computing scores for bags that won't get used, use the list of bags from part 1 to seed the list
     while to_calc.len() > 0 {
         for k in to_calc {
             // Get the corrisponding bag and see if all it's components have been computed yet.
