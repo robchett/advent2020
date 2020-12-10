@@ -6,7 +6,7 @@ fn test_run() {
     }
 }
 
-pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     let mut lines = input.split("\n");
     // Setup the storage for the tree counters.
     let mut counts = [0, 0, 0, 0, 0];

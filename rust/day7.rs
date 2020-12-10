@@ -14,7 +14,7 @@ fn test_run() {
     }
 }
 
-pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // Remove full stops from the end of lines so each split ends with bag or bags
     let clean_input = input.replace(".", "");
     // Each rule is one line
@@ -116,5 +116,5 @@ pub fn run(input: String) -> Result<(i32, i32), &'static str> {
     }
     
     // Return our answers, subtract 1 from each to account for our bag
-    return Ok((seen.len() as i32 - 1, (bags.get("shiny gold bag").unwrap().1 - 1) as i32));
+    return Ok((seen.len() as i64 - 1, (bags.get("shiny gold bag").unwrap().1 - 1) as i64));
 }

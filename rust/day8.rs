@@ -7,7 +7,7 @@ fn test_run() {
     }
 }
 
-pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     let lines = input.split("\n");
     // Create a new state machine
     let mut machine = StateMachine{pos: 0, acc: 0, commands: vec![], seen: vec![]};
@@ -80,7 +80,7 @@ pub fn run(input: String) -> Result<(i32, i32), &'static str> {
         machine.change_command(i); 
     }
 
-    return Ok((part1 as i32, part2 as i32));
+    return Ok((part1 as i64, part2 as i64));
 }
 
 // Enum of the available command type

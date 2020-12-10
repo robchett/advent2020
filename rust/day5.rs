@@ -29,7 +29,7 @@ fn test_run() {
     );
 }
 
-pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // Boarding passes are a single line each
     let lines = input.split("\n");
     // set up the bounds for part 2
@@ -62,7 +62,7 @@ pub fn run(input: String) -> Result<(i32, i32), &'static str> {
             break;
         }
     }
-    return Ok((max, our_seat));
+    return Ok((max as i64, our_seat as i64));
 }
 
 struct BoardingPass {

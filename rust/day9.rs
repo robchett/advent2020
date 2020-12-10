@@ -14,19 +14,19 @@ fn test_run() {
     }
 }
 
-pub fn run(input: String) -> Result<(i32, i32), &'static str> {
-    let part1: i32;
-    let part2: i32;
+pub fn run(input: String) -> Result<(i64, i64), &'static str> {
+    let part1: i64;
+    let part2: i64;
     // Find the fault code in the input string
     let res1 = find_fault(&input, 25);
     match res1 {
-        Ok(v) => part1 = v as i32,
+        Ok(v) => part1 = v,
         Err(e) => return Err(e)
     }
     // Find the set that adds up to the fault code
     let res2 = find_contiguous(&input, part1 as i64);
     match res2 {
-        Ok(v) => part2 = v as i32,
+        Ok(v) => part2 = v,
         Err(e) => return Err(e)
     }
     return Ok((part1, part2));
@@ -67,7 +67,7 @@ fn find_match(slice: &[i64], val: i64) -> bool {
     return false;
 }
 
-fn find_contiguous(input: &String, lookup: i64) -> Result<i32, &'static str> {
+fn find_contiguous(input: &String, lookup: i64) -> Result<i64, &'static str> {
     // Parse all our ints again
     let lines = input.split("\n");
     let mut ints = vec![];
@@ -98,7 +98,7 @@ fn find_contiguous(input: &String, lookup: i64) -> Result<i32, &'static str> {
                         max = *s;
                     }
                 }
-                return Ok((min + max) as i32);
+                return Ok(min + max);
             } else if sum > lookup {
                 // If we exceed the target move on to the next start value
                 continue 'outer;

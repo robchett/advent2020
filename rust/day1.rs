@@ -7,19 +7,19 @@ fn test_run() {
     }
 }
 
-pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // Read each line and convert to a vector of integers.
     let lines = input.split("\n");
     let mut input = Vec::new();
     for line in lines {
-        let i = line.trim().parse::<i32>();
+        let i = line.trim().parse::<i64>();
         match i {
             Ok(v) => input.push(v),
             Err(e) => println!("Error parsing {}: {}", line, e),
         }
     }
-    let mut res1 = 0;
-    let mut res2 = 0;
+    let mut res1 = 0 as i64;
+    let mut res2 = 0 as i64;
     // loop through each integer and find a corrisponding component.
     // Start the second loop from the index of the first loop, no need to backtrack.
     // Start the 3rd loop from the index of the 2nd loop.

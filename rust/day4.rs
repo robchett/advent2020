@@ -7,7 +7,7 @@ fn test_run() {
     }
 }
 
-pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // Each passport is delimited by a blank line.
     let lines = input.split("\n\n");
     let mut passports = Vec::new();

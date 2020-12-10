@@ -7,6 +7,7 @@ mod day6;
 mod day7;
 mod day8;
 mod day9;
+mod day10;
 use std::env;
 use std::fs;
 
@@ -26,8 +27,8 @@ fn main() {
     }
 }
 
-fn run_all() -> Result<(i32, i32), &'static str> {
-    let max = 9;
+fn run_all() -> Result<(i64, i64), &'static str> {
+    let max = 10;
     for i in 1..max + 1 {
         let res = run_day(i);
         match res {
@@ -41,8 +42,8 @@ fn run_all() -> Result<(i32, i32), &'static str> {
     return Ok((0, 0));
 }
 
-fn run_day(day: i32) -> Result<(i32, i32), &'static str> {
-    let method: fn(String) -> Result<(i32, i32), &'static str> = match day {
+fn run_day(day: i32) -> Result<(i64, i64), &'static str> {
+    let method: fn(String) -> Result<(i64, i64), &'static str> = match day {
         1 => day1::run,
         2 => day2::run,
         3 => day3::run,
@@ -52,6 +53,7 @@ fn run_day(day: i32) -> Result<(i32, i32), &'static str> {
         7 => day7::run,
         8 => day8::run,
         9 => day9::run,
+        10 => day10::run,
         _ => return Err("Task not yet implemented"),
     };
     let contents =

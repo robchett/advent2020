@@ -6,7 +6,7 @@ fn test_run() {
     }
 }
 
-pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     let lines = input.split("\n");
     let mut res1 = 0;
     let mut res2 = 0;

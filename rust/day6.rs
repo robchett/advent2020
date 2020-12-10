@@ -7,7 +7,7 @@ fn test_run() {
     }
 }
 
-pub fn run(input: String) -> Result<(i32, i32), &'static str> {
+pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // Set up outputs
     let mut part2: i32 = 0;
     let mut part1: i32 = 0;
@@ -45,5 +45,5 @@ pub fn run(input: String) -> Result<(i32, i32), &'static str> {
         // Increament part 2 by the answers all had
         part2 += group_all.len() as i32;
     }
-    return Ok((part1, part2));
+    return Ok((part1 as i64, part2 as i64));
 }
