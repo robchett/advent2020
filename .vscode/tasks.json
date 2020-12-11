@@ -1,0 +1,19 @@
+{
+
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "cargo test build",
+            "command": "cargo",
+            "args": [
+                "test", "--no-run"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/rust/"
+            },
+            "problemMatcher": [
+                "$rustc"
+            ],
+        }
+    ]
+}

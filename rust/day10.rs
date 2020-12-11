@@ -63,7 +63,6 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
         out2 *= sec_branches;
     }
 
-    println!("part 2 i64: {}", out2);
     return Ok((out.0 * out.1, out2));
 }
 
