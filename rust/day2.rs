@@ -45,7 +45,7 @@ impl PasswordLine {
         // loop the characters in the line one at a time.
         for c in line.trim().chars() {
             match c {
-                // Read the first number as min, the second as max. 
+                // Read the first number as min, the second as max.
                 // Use a boolean (is_max) to decide if we have the first or second.
                 // Use base10 multiplication to deal with numbers > 9
                 // Improvement: Use a tuple for this?
@@ -55,7 +55,7 @@ impl PasswordLine {
                             max *= 10
                         }
                         max += c.to_digit(10).unwrap_or_default()
-                    } else {                        
+                    } else {
                         if min > 0 {
                             min *= 10
                         }

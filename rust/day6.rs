@@ -3,7 +3,7 @@ fn test_run() {
     let res = run("abc\n\na\nb\nc\n\nab\nac\n\na\na\na\na\n\nb".to_owned());
     match res {
         Ok(i) => assert_eq!(i, (11, 6)),
-        Err(e) => panic!(e)
+        Err(e) => panic!(e),
     }
 }
 
@@ -18,7 +18,11 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
         let mut group_chars = vec![];
         let mut group_first = true;
         // Split the groups into char vectors
-        for person in group.split("\n").into_iter().map(|x| x.chars().collect::<Vec<char>>()) {
+        for person in group
+            .split("\n")
+            .into_iter()
+            .map(|x| x.chars().collect::<Vec<char>>())
+        {
             let mut group_all_new = vec![];
             for c in person {
                 // Part 1: Add unique questions to the group array
@@ -28,7 +32,7 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
                 // Part 2: all questions anwered by all people must be in the first person so start with all their answers
                 // for each other person in the group we can keep the question if they answered it and drop it if they didn't
                 // do a lookup and add to a new list if they pass
-                // after the last person anything left was answered by everyone 
+                // after the last person anything left was answered by everyone
                 if group_first {
                     group_all_new.push(c);
                 } else {

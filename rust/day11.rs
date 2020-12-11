@@ -11,13 +11,13 @@ fn test_run() {
 enum Position {
     EmptySeat,
     FilledSeat,
-    Floor
+    Floor,
 }
 
 pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // Read each line and convert a 2d vector of Positions.
     let lines = input.split("\n");
-    let mut map= vec![];
+    let mut map = vec![];
     for line in lines {
         let mut line_vec = vec![];
         for c in line.chars() {
@@ -34,13 +34,17 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // Reduce each task to the positions that no longer change
     let part1 = find_repeat(&map, get_adjacent_filled, 3);
     let part2 = find_repeat(&map, get_visible_filled, 4);
-    
+
     // Return the number of filled seats in each map
     return Ok((count_seats(&part1), count_seats(&part2)));
 }
 
 // Take a map, function to work out how many seats are filled for a given position and how many seats need to be empty to keep filled.
-fn find_repeat(map: &Vec<Vec<Position>>, cmp: fn(usize, usize, &Vec<Vec<Position>>) -> i32, need: i32) ->  Vec<Vec<Position>> {
+fn find_repeat(
+    map: &Vec<Vec<Position>>,
+    cmp: fn(usize, usize, &Vec<Vec<Position>>) -> i32,
+    need: i32,
+) -> Vec<Vec<Position>> {
     // Copy the orinal map
     let mut prev_map = vec![];
     for line in map {
@@ -65,7 +69,7 @@ fn find_repeat(map: &Vec<Vec<Position>>, cmp: fn(usize, usize, &Vec<Vec<Position
                     // Floor maintinas a floor
                     Position::Floor => {
                         new_line.push(Position::Floor);
-                    },
+                    }
                     // Swap an empty seat if the comparison function returns no matches
                     Position::EmptySeat => {
                         let adjacent = cmp(x, y, &prev_map);
@@ -82,12 +86,11 @@ fn find_repeat(map: &Vec<Vec<Position>>, cmp: fn(usize, usize, &Vec<Vec<Position
                         if adjacent > need {
                             new_line.push(Position::EmptySeat);
                             changes = true;
-
                         } else {
                             new_line.push(Position::FilledSeat);
                         }
                     }
-                }                
+                }
             }
             new_map.push(new_line);
         }
@@ -101,7 +104,16 @@ fn find_repeat(map: &Vec<Vec<Position>>, cmp: fn(usize, usize, &Vec<Vec<Position
 
 // Look in each direction for a filled seat
 fn get_visible_filled(x: usize, y: usize, map: &Vec<Vec<Position>>) -> i32 {
-    let dirs = vec![(-1 ,-1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)];
+    let dirs = vec![
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, -1),
+        (0, 1),
+        (1, -1),
+        (1, 0),
+        (1, 1),
+    ];
     let mut seen = 0;
     let x_size = map.len() as i32;
     let y_size = map.get(0).unwrap().len() as i32;
@@ -117,15 +129,14 @@ fn get_visible_filled(x: usize, y: usize, map: &Vec<Vec<Position>>) -> i32 {
             }
             match *map.get(x0 as usize).unwrap().get(y0 as usize).unwrap() {
                 // Skip over floor
-                Position::Floor => {},
+                Position::Floor => {}
                 // Empty seat, not an adjacent
-                Position::EmptySeat => {
-                     break
-                },
+                Position::EmptySeat => break,
                 // Filled seat, add to adjacent count.
-                Position::FilledSeat => { 
-                    seen += 1; break; 
-                },
+                Position::FilledSeat => {
+                    seen += 1;
+                    break;
+                }
             }
         }
     }
@@ -133,7 +144,16 @@ fn get_visible_filled(x: usize, y: usize, map: &Vec<Vec<Position>>) -> i32 {
 }
 
 fn get_adjacent_filled(x: usize, y: usize, map: &Vec<Vec<Position>>) -> i32 {
-    let dirs = vec![(-1 ,-1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)];
+    let dirs = vec![
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, -1),
+        (0, 1),
+        (1, -1),
+        (1, 0),
+        (1, 1),
+    ];
     let mut seen = 0;
     let x_size = map.len() as i32;
     let y_size = map.get(0).unwrap().len() as i32;
@@ -146,20 +166,23 @@ fn get_adjacent_filled(x: usize, y: usize, map: &Vec<Vec<Position>>) -> i32 {
         }
         match *map.get(x0 as usize).unwrap().get(y0 as usize).unwrap() {
             // Skip over floor
-            Position::Floor => {},
+            Position::Floor => {}
             // Empty seat, not an adjacent
-            Position::EmptySeat => {
-                continue
-            },
+            Position::EmptySeat => continue,
             // Filled seat, add to adjacent count.
-            Position::FilledSeat => { 
-                seen += 1; continue; 
-            },
+            Position::FilledSeat => {
+                seen += 1;
+                continue;
+            }
         }
     }
     return seen;
 }
 
 fn count_seats(map: &Vec<Vec<Position>>) -> i64 {
-    return map.into_iter().fold(0, |acc, v| acc + v.into_iter().fold(0, |acc, c| acc + (*c == Position::FilledSeat) as i64));
+    return map.into_iter().fold(0, |acc, v| {
+        acc + v
+            .into_iter()
+            .fold(0, |acc, c| acc + (*c == Position::FilledSeat) as i64)
+    });
 }

@@ -24,14 +24,14 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // Start the second loop from the index of the first loop, no need to backtrack.
     // Start the 3rd loop from the index of the 2nd loop.
     // Improvment: Pre-calculate the componet values so no math needs to performed, only equality
-    // -- lookup = 2020 - input[m]; 
+    // -- lookup = 2020 - input[m];
     // -- if lookup == input[n] {}
     for n in 0..input.len() {
         for m in n..input.len() {
             if input[m] + input[n] == 2020 {
                 // store the output for the first part
                 res1 = input[m] * input[n];
-            }            
+            }
             for o in m..input.len() {
                 if input[m] + input[n] + input[o] == 2020 {
                     res2 = input[m] * input[n] * input[o];

@@ -60,7 +60,7 @@ struct Passport {
 }
 
 impl Passport {
-    // Parses the entry as an int and compares to the 
+    // Parses the entry as an int and compares to the
     fn _valid_year(entry: &String, start: i32, end: i32) -> bool {
         let val = entry.parse::<i32>().unwrap_or_default();
         return val >= start && val <= end;
@@ -148,7 +148,7 @@ impl Passport {
             || part == "hzl"
             || part == "oth";
     }
-        // Checks the presence of the pid, and if it is a 9 digit number (allowing leading 0s)
+    // Checks the presence of the pid, and if it is a 9 digit number (allowing leading 0s)
     fn valid_pid(&self) -> bool {
         if !self.pid.0 {
             return false;
