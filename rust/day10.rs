@@ -1,3 +1,6 @@
+use std::collections::HashMap;
+use std::collections::hash_map::Entry;
+
 #[test]
 fn test_run() {
     let res = run("16\n10\n15\n5\n1\n11\n7\n19\n6\n12\n4".to_owned());
@@ -12,7 +15,7 @@ fn test_run() {
     }
 }
 
-pub fn run(input: String) -> Result<(i64, i64), &'static str> {
+pub fn run<'a>(input: String) -> Result<(i64, i64), &'static str> {
     // Read each line and convert to a vector of integers.
     let lines = input.split("\n");
     let mut input = vec![];
@@ -58,23 +61,39 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     sections.push(&input[prev_sec..]);
 
     // For each section find out how many times we branch and multiply all the sections for our result
+    let mut cache:HashMap<&'a str, i32> = HashMap::new();
     for s in sections {
-        let sec_branches = 1 + reduce(&s[..]) as i64;
+        let o = reduce(&s[..], cache);
+        let sec_branches = 1 + o.0 as i64;
         out2 *= sec_branches;
+        cache = o.1;
     }
 
     return Ok((out.0 * out.1, out2));
 }
 
+fn string_to_static_str(s: String) -> &'static str {
+    Box::leak(s.into_boxed_str())
+}
+
 // Recurse into smaller and smaller slices until we have no possible branches (can't branch with 2 points)
 // This is quite dumb, it will track the same branch multiple times
 // However as we've split the full list first it's still very quick
-fn reduce(points: &[i32]) -> i32 {
+fn reduce<'a>(points: &[i32], mut cache: HashMap<&'a str, i32>) -> (i32, HashMap<&'a str, i32>) {
+    if points.len() < 3 {
+        return (0, cache);
+    }
+    
     let v = points[0];
     let mut out = 0;
-    if points.len() < 3 {
-        return out;
+    let pattern = string_to_static_str(format!("{:?}", points.iter().map(|x| x - v).collect::<Vec<i32>>()));    
+    match cache.entry(pattern) {
+        Entry::Occupied(o) => return (*o.get(), cache),
+        Entry::Vacant(_) => {}
     }
+
+    //println!("New pattern found {:?}", pattern);
+
     let c1 = points.get(1).unwrap_or(&9999) - v <= 3;
     let c2 = points.get(2).unwrap_or(&9999) - v <= 3;
     let c3 = points.get(3).unwrap_or(&9999) - v <= 3;
@@ -88,13 +107,20 @@ fn reduce(points: &[i32]) -> i32 {
     }
     // Then recurse from the start of each new branch and add those to the result
     if c1 {
-        out += reduce(&points[1..])
+        let o = reduce(&points[1..], cache);
+        out += o.0;
+        cache = o.1
     }
     if c2 {
-        out += reduce(&points[2..])
+        let o = reduce(&points[2..], cache);
+        out += o.0;
+        cache = o.1
     }
     if c3 {
-        out += reduce(&points[3..])
+        let o = reduce(&points[3..], cache);
+        out += o.0;
+        cache = o.1
     }
-    return out;
+    cache.insert(pattern, out);
+    return (out, cache);
 }
