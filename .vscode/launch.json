@@ -6,7 +6,7 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/rust/target/debug/deps/advent2020rust-5976d7da61ab862c.exe",
-            "args": [],
+            "args": ["test_run_18"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

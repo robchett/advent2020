@@ -7,6 +7,7 @@ mod day14;
 mod day15;
 mod day16;
 mod day17;
+mod day18;
 mod day2;
 mod day3;
 mod day4;
@@ -68,6 +69,7 @@ fn run_day(day: i32) -> Result<(i64, i64), &'static str> {
         15 => day15::run,
         16 => day16::run,
         17 => day17::run,
+        18 => day18::run,
         _ => return Err("Task not yet implemented"),
     };
     let contents =
