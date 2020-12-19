@@ -8,6 +8,7 @@ mod day15;
 mod day16;
 mod day17;
 mod day18;
+mod day19;
 mod day2;
 mod day3;
 mod day4;
@@ -36,7 +37,7 @@ fn main() {
 }
 
 fn run_all() -> Result<(i64, i64), &'static str> {
-    let max = 17;
+    let max = 19;
     for i in 1..max + 1 {
         let res = run_day(i);
         match res {
@@ -70,6 +71,7 @@ fn run_day(day: i32) -> Result<(i64, i64), &'static str> {
         16 => day16::run,
         17 => day17::run,
         18 => day18::run,
+        19 => day19::run,
         _ => return Err("Task not yet implemented"),
     };
     let contents =
