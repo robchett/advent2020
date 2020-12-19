@@ -19,6 +19,7 @@ mod day8;
 mod day9;
 use std::env;
 use std::fs;
+use std::time::{Instant};
 
 fn main() {
     for argument in env::args() {
@@ -74,11 +75,13 @@ fn run_day(day: i32) -> Result<(i64, i64), &'static str> {
         19 => day19::run,
         _ => return Err("Task not yet implemented"),
     };
+    let now = Instant::now();
     let contents =
         fs::read_to_string(format!("../inputs/day{}.txt", day)).expect("Input file not found");
     match method(contents.replace("\r", "")) {
         Ok(v) => {
-            println!("Day {}: {} & {}", day, v.0, v.1);
+            println!("Day {:0>2}: {} & {}", day, v.0, v.1);
+            println!("Day {:0>2}: took {:.4}ms", day, now.elapsed().as_micros() as f64 / 1000.);
             return Ok(v);
         }
         Err(e) => {
