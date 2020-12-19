@@ -81,8 +81,8 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // By changing rule 8 to (42 8) and 11 to (42 31 | 42 11 31) we need to consider repeating patterns
     // As the program is only repeats at 8 or 11 and there is no links between 8 and 11 we can reduce to two patterns 
     // The first is ^<42>{1, } as rule 8 can check rule 42 as many times as possible
-    // The second is <31><42>{1, } as 11 is inserted into the middle of the two
-    // The rules can be reduced to ^<42>{2,}<31>{1,j}$ Where j < the repetion of <42>
+    // The second is <31>{j}<42>{j}, j>1 as 11 is inserted into the middle of the two
+    // The rules can be reduced to ^<42>{i}<31>{j}$ Where j < i
     // Now we cheat and modify the program to check for ^<42>{i}<31>{j}$
     let mut v0 = vec![];   
     for i in 2..30 {
