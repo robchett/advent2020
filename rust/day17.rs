@@ -14,17 +14,21 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     let mut part_1: i64 = 0;
     let mut part_2: i64 = 0;
     // Set up our grids, increase them in size to accomidate the boundries, 
-    let grid_size = lines.len() + 20;
-    let mut grid1 = vec![vec![vec![vec![false; grid_size]; grid_size]; grid_size]; 1];
-    let mut grid2 = vec![vec![vec![vec![false; grid_size]; grid_size]; grid_size]; grid_size];
+    // This is input length + 7*2 + 2
+    let grid_size = lines.len() + 16;
+    // W and Z space is smaller than x/y apace as they both start at size 1. Again add twice the iterations and the boundry
+    let zw_size = 15;
+    let mut grid1 = vec![vec![vec![vec![false; grid_size]; grid_size]; zw_size]; 1];
+    let mut grid2 = vec![vec![vec![vec![false; grid_size]; grid_size]; zw_size]; zw_size];
     // Populate the starting grid and counters
     // Start in the middle of the grid so we don't have to worry about offsets for -ve indexes
-    let offset = grid_size / 2;
+    let offset = (lines.len() / 2) + 6;
+    let zw_offset = zw_size / 2;
     for (y, line) in lines.iter().enumerate() {
         for (x, c) in line.chars().enumerate() {
             if c == '#' {
-                grid1[0][offset][y + offset][x + offset] = true;
-                grid2[offset][offset][y + offset][x + offset] = true;
+                grid1[0][zw_offset][y + offset][x + offset] = true;
+                grid2[zw_offset][zw_offset][y + offset][x + offset] = true;
                 part_1 += 1;
                 part_2 += 1;
             }
@@ -51,17 +55,19 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     }
 
     // Loop the first 6 iterations of CGL in 3&4 dimensions
-    for _ in 1..7 {
+    for j in 1..7 {
         // We're copying the grids here. Would probably be better to scan & update seperatly to avoid this.
-        let mut new_grid1 = vec![vec![vec![vec![false; grid_size]; grid_size]; grid_size]; 1];
-        let mut new_grid2 = vec![vec![vec![vec![false; grid_size]; grid_size]; grid_size]; grid_size];
+        let mut new_grid1 = vec![vec![vec![vec![false; grid_size]; grid_size]; zw_size]; 1];
+        let mut new_grid2 = vec![vec![vec![vec![false; grid_size]; grid_size]; zw_size]; zw_size];
         // Move through the entire grid one by one.
-        for w in 1..grid_size-1 {
-            for z in 1..grid_size-1 {
-                for y in 1..grid_size-1 {
-                    for x in 1..grid_size-1 {
+        // Increase the checked area by 1 in each direction after each iteration
+        let offset = 7-j;
+        for w in offset..zw_size-offset {
+            for z in offset..zw_size-offset {
+                for y in offset..grid_size-offset {
+                    for x in offset..grid_size-offset {
                         // If we're at the center of the w space then we can loop at the 3d version.
-                        if w == 1 {   
+                        if w == zw_offset {   
                             let o = compute_new(&grid1, &dirs1, x,y,z,0);           
                             new_grid1[0][z][y][x] = o.0;
                             part_1 += o.1 as i64; 
