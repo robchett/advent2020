@@ -10,6 +10,7 @@ mod day17;
 mod day18;
 mod day19;
 mod day2;
+mod day20;
 mod day3;
 mod day4;
 mod day5;
@@ -73,6 +74,7 @@ fn run_day(day: i32) -> Result<(i64, i64), &'static str> {
         17 => day17::run,
         18 => day18::run,
         19 => day19::run,
+        20 => day20::run,
         _ => return Err("Task not yet implemented"),
     };
     let now = Instant::now();
