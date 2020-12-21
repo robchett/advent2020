@@ -102,7 +102,7 @@ pub fn run(input: String) -> Result<(i64, i64), &'static str> {
     // Sort, map and reduce.
     let mut list = allergen_translation;
     list.sort_by(|x, y| x.0.cmp(&y.0));
-    println!("Day 21, Part 2 - {}", list.iter().map(|x| x.1.to_owned()).collect::<Vec<String>>().connect(","));    
+    println!("Day 21, Part 2 - {}", list.iter().map(|x| x.1.to_owned()).collect::<Vec<String>>().join(","));    
 
     return Ok((part_1 as i64, 0 as i64));
 }
