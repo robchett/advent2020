@@ -15,6 +15,7 @@ mod day21;
 mod day22;
 mod day23;
 mod day24;
+mod day25;
 mod day3;
 mod day4;
 mod day5;
@@ -43,7 +44,7 @@ fn main() {
 }
 
 fn run_all() -> Result<(i64, i64), &'static str> {
-    let max = 24;
+    let max = 25;
     for i in 1..max + 1 {
         let res = run_day(i);
         match res {
@@ -83,6 +84,7 @@ fn run_day(day: i32) -> Result<(i64, i64), &'static str> {
         22 => day22::run,
         23 => day23::run,
         24 => day24::run,
+        25 => day25::run,
         _ => return Err("Task not yet implemented"),
     };
     let now = Instant::now();
